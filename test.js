@@ -15,7 +15,7 @@ var testSize;
 it('should minify images', function (cb) {
 	this.timeout(40000);
 
-	var stream = zhitu('dirpath',false);
+	var stream = zhitu({enableWebp:false});
 
 	stream.once('data', function (file) {
 		testSize = file.contents.length;
@@ -33,15 +33,15 @@ it('should minify images', function (cb) {
 	stream.end();
 });
 
-it('should have configure option', function (cb) {
+it('should support webp file',function(cb){
 	this.timeout(40000);
 
-	var stream = zhitu({
-		webp: true
-	});
+	var stream = zhitu({enableWebp:true});
 
 	stream.once('data', function (file) {
-		assert(file.contents.length < testSize);
+		testSize = file.contents.length;
+		console.log("size comparison:",fs.statSync('fixture.png').size, file.contents.length);
+		assert(file.contents.length < fs.statSync('fixture.png').size);
 	});
 
 	stream.on('end', cb);
@@ -55,7 +55,7 @@ it('should have configure option', function (cb) {
 });
 
 it('should skip unsupported images', function (cb) {
-	var stream = zhitu();
+	var stream = zhitu({});
 
 	stream.once('data', function (file) {
 		assert.strictEqual(file.contents, null);

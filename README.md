@@ -19,22 +19,23 @@ $ npm install --global gulp
 
 ```js
 //全局安装
-$ npm install --global gulp-imageisux
+$ npm install --global gulp-zhitu
 
 //局部安装
-$ npm install --save-dev gulp-imageisux
+$ npm install --save-dev gulp-zhitu
 ```
 
 ##Usage
 1、声明图片地址，例如放在img目录下面`gulp.src(['img/*'])`。
-2、指定参数，压缩图片导出目录`/dest/`和是否同时导出webp格式。
+2、指定参数，使用opts。
 
 ```js
 var imageisux = require('gulp-imageisux');
 
 gulp.task('imageisux', function() {
 	return gulp.src(['img/*'])
-			   .pipe(imageisux('/dirpath/',true));
+			   .pipe(imageisux({enableWebp:false})
+			   .pipe(gulp.dest('destPath'));
 });
 ```
 

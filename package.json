@@ -1,11 +1,11 @@
 {
-  "name": "gulp-imageisux",
-  "version": "1.0.5",
-  "description": "智图gulp插件",
+  "name": "gulp-zhitu",
+  "version": "1.0.1",
+  "description": "智图gulp插件，更好支持gulp-stream",
   "main": "index.js",
   "repository": {
     "type": "git",
-    "url": "git://github.com/targetkiller/gulp-imageisux"
+    "url": "git://github.com/daiqing2009/gulp-imageisux"
   },
   "scripts": {
     "test": "mocha"
@@ -14,9 +14,9 @@
     "index.js"
   ],
   "author": {
-    "name": "TQ",
-    "email": "targetkillering@gmail.com",
-    "url": "http://tqtan.com"
+    "name": "qing.dai",
+    "email": "qing.dai@baozun.cn",
+    "url": "https://cn.linkedin.com/in/qing-戴-72694117"
   },
   "keywords": [
     "gulpplugin",
@@ -38,30 +38,28 @@
     "gulp-util": "~2.2.14",
     "gulp": "~3.3.4",
     "request": "~2.31.0",
-    "through2": "~0.4.1",
+    "through2-concurrent": "^1.1.0",
     "needle": "*"
   },
   "devDependencies": {
     "mocha": "*"
   },
   "bugs": {
-    "url": "https://github.com/targetkiller/gulp-imageisux/issues"
+    "url": "https://github.com/daiqing2009/gulp-imageisux/issues"
   },
-  "homepage": "https://github.com/targetkiller/gulp-imageisux",
-  "_id": "gulp-imageisux@1.0.1",
-  "dist": {
-
-  },
-  "_from": "gulp-imageisux@",
+  "homepage": "https://github.com/daiqing2009/gulp-imageisux",
+  "_id": "gulp-zhitu@1.0.1",
+  "dist": {},
+  "_from": "gulp-zhitu@",
   "_npmVersion": "1.4.14",
   "_npmUser": {
-    "name": "TQ",
-    "email": "targetkillering@gmail.com"
+    "name": "qing.dai",
+    "email": "qing.dai@baozun.cn"
   },
   "maintainers": [
     {
-      "name": "TQ",
-      "email": "targetkillering@gmail.com"
+      "name": "qing.dai",
+      "email": "qing.dai@baozun.cn"
     }
   ]
 }
