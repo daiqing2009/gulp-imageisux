@@ -58,12 +58,13 @@ function zhitu(opts) {
     var validExts = ['jpg', 'jpeg', 'png', 'gif'];
 //    _abspath = abspath || "";
     enableWebp = opts.enableWebp || false;
-
-    var stream = through.obj({maxConcurrency: 10},
+    const PLUGIN_NAME = 'zhituMin';
+    const MAX_CONCURRENCY = 3;
+    var stream = through.obj({maxConcurrency: MAX_CONCURRENCY},
         function (file, encoding, callback) {
             var _that = this;
             if (file.isNull()) {
-                //this.push(file);
+                //this.push(file)
                 callback(null, file);
                 return;
             }
@@ -96,7 +97,7 @@ function zhitu(opts) {
 
                 needle.post('http://zhitu.isux.us/index.php/preview/upload_file', data, {multipart: true}, function (err, resp, body) {
                     if (err) {
-                        gutil.log('[error]', file_name + ' cannot post to the server.');
+                        gutil.log('[error]', file_name + ' cannot post to the server.'+err);
                         callback(new gutil.PluginError(PLUGIN_NAME, file_name + ' cannot post to the server.'));
                         return;
                         //  write_originfile(file_name);
@@ -119,11 +120,11 @@ function zhitu(opts) {
                          * output_code: the status code
                          * size: images size
                          */
+                        //TODO: 需要支持返回webp
                         var output = json_str.output;
                         var output_webp = json_str.output_webp;
                         var output_code = json_str.code;
-                        var size =
-                            json_str.size;
+                        var size = json_str.size;
                         /*
                          * all the images return
                          * type=1：origin
