@@ -42,6 +42,4 @@ gulp.task('imageisux', function() {
 ##API
 两个参数，`dirpath`目标目录以及`enableWebp`是否同时导出对应WEBP格式图片。
 
- - `dirpath`: 如果未定义，会自动生成两个目录：'/dest/'目录放压缩后图片，'/webp/'目录放对应的webp格式压缩图片。
-
  - `enableWebp`  : 若为`true`，则会同时输出webp图片；若为`false`，则只会有压缩后原格式图片。
