@@ -9,50 +9,6 @@ var _abspath;
 var enableWebp;
 var file_dirname;
 
-// if err, write the origin file instead
-function write_originfile(file_name) {
-    if (file_dirname !== undefined) {
-        // read file
-        fs.readFile(file_dirname + '/' + file_name, '', function (err, body) {
-            if (err) {
-                gutil.log('[error]', file_name + ' cannot read...');
-            }
-            else {
-                var DEST_DIR;
-                if (_abspath !== "") {
-                    DEST_DIR = file_dirname + _abspath;
-                } else {
-                    DEST_DIR = file_dirname + "/dest/";
-                }
-
-                fs.exists(DEST_DIR, function (exists) {
-                    if (!exists) {
-                        fs.mkdirSync(DEST_DIR);
-                    }
-                });
-
-                var fd = DEST_DIR + file_name;
-
-                // read file
-                fs.writeFile(fd, body, function (err, data) {
-                    if (err) {
-                        // gutil.log('[error]', '[fun write_originfile]'+ file_name +' cannot write, will be write again...');
-                        // if err, write to file twice
-                        fs.writeFile(fd, body, function (err, data) {
-                            if (err) {
-                                gutil.log('[error]', file_name + ' cannot write! Error info:' + err);
-                            }
-                        });
-                    }
-                });
-            }
-        });
-    }
-    else {
-        gutil.log('[error]', 'file_dirname is not exist!');
-    }
-}
-
 function zhitu(opts) {
 
     var validExts = ['jpg', 'jpeg', 'png', 'gif'];
@@ -60,7 +16,7 @@ function zhitu(opts) {
     enableWebp = opts.enableWebp || false;
     const PLUGIN_NAME = 'zhituMin';
     const MAX_CONCURRENCY = 3;
-    var stream = through.obj({maxConcurrency: MAX_CONCURRENCY},
+    return through.obj({maxConcurrency: MAX_CONCURRENCY},
         function (file, encoding, callback) {
             var _that = this;
             if (file.isNull()) {
@@ -95,10 +51,12 @@ function zhitu(opts) {
                     webp: enableWebp
                 };
 
+                //TODO: 连续多次尝试使用智图压缩
                 needle.post('http://zhitu.isux.us/index.php/preview/upload_file', data, {multipart: true}, function (err, resp, body) {
                     if (err) {
-                        gutil.log('[error]', file_name + ' cannot post to the server.'+err);
-                        callback(new gutil.PluginError(PLUGIN_NAME, file_name + ' cannot post to the server.'));
+                        gutil.log('[error]', file_name + ' cannot post to the server.' + err);
+                        //失败了给后续的功能开发
+                        callback(new gutil.PluginError(PLUGIN_NAME, file_name + ' cannot post to the server.' + err));
                         return;
                         //  write_originfile(file_name);
                     }
@@ -106,7 +64,7 @@ function zhitu(opts) {
                     // server will return a json
                     if (body.indexOf('{') < 0) {
                         gutil.log('[error]', 'The data returned has error! The file name is:' + file_name);
-                        callback(new gutil.PluginError(PLUGIN_NAME,'The data returned has error! The file name is:' + file_name));
+                        callback(new gutil.PluginError(PLUGIN_NAME, 'The data returned has error! The file name is:' + file_name));
                         return;
                         //write_originfile(file_name);
                     }
@@ -123,14 +81,14 @@ function zhitu(opts) {
                         //TODO: 需要支持返回webp
                         var output = json_str.output;
                         var output_webp = json_str.output_webp;
-                        var output_code = json_str.code;
-                        var size = json_str.size;
+                        //var output_code = json_str.code;
+                        //var size = json_str.size;
                         /*
                          * all the images return
                          * type=1：origin
                          * type=2：webp
                          */
-                        var output_ary = new Array();
+                        var output_ary = [];
                         // abspath is exist and need not use webp
                         if (
                             _abspath !== "" && enableWebp === false) {
@@ -167,7 +125,7 @@ function zhitu(opts) {
                         //gutil.log('[info]', output_ary);
                         var FILE_CONTENT = file_name.split(
                             '.' + file_type);
-                        var FILENAME = FILE_CONTENT[0];
+                      //  var FILENAME = FILE_CONTENT[0];
                         var FILETYPE = file_type;
 
                         for (var i = 0; i < output_ary.length; i++) {
@@ -197,7 +155,7 @@ function zhitu(opts) {
                                     output_ary[i].url, function (err, resp, body) {
                                         if (body) {
                                             file.contents = body;
-                                            callback(null,file);
+                                            callback(null, file);
                                             /**
 
                                              if(_abspath!==""&&OUTPUT_TYPE==1)
@@ -257,7 +215,6 @@ function zhitu(opts) {
             //callback();
 //            return;
         });
-    return stream;
 }
 
 module.exports = zhitu;
