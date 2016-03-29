@@ -1,5 +1,6 @@
 var through = require('through2-concurrent');
 var gutil = require('gulp-util');
+var prettyBytes = require('pretty-bytes');
 var needle = require('needle');
 var path = require('path');
 var fs = require('fs');
@@ -154,7 +155,10 @@ function zhitu(opts) {
                                 needle.get(
                                     output_ary[i].url, function (err, resp, body) {
                                         if (body) {
+                                            var prevLength = file.contents.length;
                                             file.contents = body;
+                                            gutil.log('gulp-zhitu: ', gutil.colors.green('Compressed:') + file.relative + ' (saved ' +
+                                                prettyBytes(prevLength - body.length) + ' - ' + ((1 - body.length / prevLength) * 100).toFixed(0) + '%)');
                                             callback(null, file);
                                             /**
 
@@ -183,17 +187,17 @@ function zhitu(opts) {
                                              fs.writeFile(fd, body, function(err, data)
 
                                              {
-                                                                                                 if (err) {
-                                                                                                     // gutil.log('[error]', PREFIX + FILENAME + APPENDFIX +' cannot write, will be write again...');
-                                                                                                     // if err, write to file twice
-                                                                                                     fs.writeFile(fd, body, function(err, data){
-                                                                                                         if (err) {
-                                                                                                           gutil.log('[error]', PREFIX + FILENAME + APPENDFIX +' cannot write! Error info:'+err);
-                                                                                                           write_originfile(file_name);
-                                                                                                         }
-                                                                                                     });
-                                                                                                 }
-                                                                                             });*/
+                                                 if (err) {
+                                                     // gutil.log('[error]', PREFIX + FILENAME + APPENDFIX +' cannot write, will be write again...');
+                                                     // if err, write to file twice
+                                                     fs.writeFile(fd, body, function(err, data){
+                                                         if (err) {
+                                                           gutil.log('[error]', PREFIX + FILENAME + APPENDFIX +' cannot write! Error info:'+err);
+                                                           write_originfile(file_name);
+                                                         }
+                                                     });
+                                                 }
+                                             });*/
                                         } else {
                                             gutil.log('[error]', 'The data of ' + file_name + ' returned is not exist!');
 //                                                write_originfile(file_name);
