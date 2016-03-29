@@ -1,6 +1,8 @@
 #gulp-imageisux
 
-[![NPM](https://nodei.co/npm/gulp-imageisux.png)](https://nodei.co/npm/gulp-imageisux/)
+[![NPM](https://nodei.co/npm/gulp-zhitu.png)](https://nodei.co/npm/gulp-zhitu/)
+
+[![Build Status](https://travis-ci.org/daiqing2009/gulp-imageisux.svg?branch=master)](https://travis-ci.org/daiqing2009/gulp-imageisux)
 
 [智图](http://zhitu.isux.us/)的gulp插件
 
